@@ -1,2 +1,2 @@
-web: ts-node-dev src/server.ts
+web: node src/server.js
 
