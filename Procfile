@@ -1,2 +1,2 @@
-web: npm run dev
+web: ts-node-dev --ignore-watch node_modules src/server.ts
 
