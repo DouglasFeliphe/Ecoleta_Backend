@@ -17,3 +17,10 @@ npx ts-node src/server.ts
   "scripts": {
     "dev": "ts-node-dev --ignore-watch node_modules src/server.ts", : agiliza o tempo de recarga da aplicação   
   },
+
+npx knex init
+npx knex migrate:make [nome_da_migration]
+npx knex migrate:latest 
+npx knex migrate:rollback
+npx knex seed:make [seed_name]
+npx knex seed:run
