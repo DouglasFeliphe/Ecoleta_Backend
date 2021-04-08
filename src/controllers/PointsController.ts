@@ -1,4 +1,4 @@
-import connection from '../database/connection';
+import knex from '../database/connection';
 import { Request, Response } from 'express';
 
 class PointsController {
@@ -12,7 +12,7 @@ class PointsController {
             .split(',')
             .map(item => Number(item.trim()))
 
-        const points = await connection('points')
+        const points = await knex('points')
             .join('point_items', 'points.id', '=', 'point_items.point_id')
             .whereIn('point_items.item_id', parsedItems)
             .where('city', String(city))
@@ -26,13 +26,13 @@ class PointsController {
     async show(request: Request, response: Response) {
         const { id } = request.params;
 
-        const point = await connection('points').select().first().where('id', id)
+        const point = await knex('points').select().first().where('id', id)
 
         if (!point) {
             return response.status(400).json('Ponto de coleta inexistente!')
         }
         // listar todos os items do ponto de coleta específico
-        const items = await connection('items')
+        const items = await knex('items')
             .join('point_items', 'items.id', '=', 'point_items.item_id')
             .where('point_items.point_id', id)
             .select('items.*')
@@ -43,30 +43,32 @@ class PointsController {
     async create(request: Request, response: Response) {
 
         const {
-            id, image, name,
-            email, whatsapp, latitude,
-            longitude, city, uf,
-            items
-        } = request.body
-
-        // caso alguma query falhar ele não roda as outras
-        const transaction = await connection.transaction()
-
-        const point = {
-            image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60',
             name,
             email,
             whatsapp,
             latitude,
             longitude,
             city,
-            uf
-        }
+            uf,
+            items,
+        } = request.body;
 
-        const insertedIds = await transaction('points').insert(point)
+        const trx = await knex.transaction();
 
-        // relacionamento
-        const point_id = insertedIds[0]
+        const point = {
+            image: request.file.filename,
+            name,
+            email,
+            whatsapp,
+            latitude,
+            longitude,
+            city,
+            uf,
+        };
+
+        const insertedIds = await trx('points').insert(point);
+
+        const point_id = insertedIds[0];
 
         const pointItems = items
             .split(',')
@@ -74,18 +76,18 @@ class PointsController {
             .map((item_id: number) => {
                 return {
                     item_id,
-                    point_id
-                }
-            })
+                    point_id,
+                };
+            });
 
-        await transaction('point_items').insert(pointItems)
+        await trx('point_items').insert(pointItems);
 
-        transaction.commit()
+        await trx.commit();
 
         return response.json({
             id: point_id,
-            ...point
-        })
+            ...point,
+        });
     }
 };
 
