@@ -24,3 +24,5 @@ npx knex migrate:latest
 npx knex migrate:rollback
 npx knex seed:make [seed_name]
 npx knex seed:run
+
+tsc -  fazer deploy do código para produção.

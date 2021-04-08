@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -9,8 +20,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function () { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function () { return this; }), g;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -54,12 +65,12 @@ var PointsController = /** @class */ (function () {
                             .split(',')
                             .map(function (item) { return Number(item.trim()); });
                         return [4 /*yield*/, connection_1.default('points')
-                            .join('point_items', 'points.id', '=', 'point_items.point_id')
-                            .whereIn('point_items.item_id', parsedItems)
-                            .where('city', String(city))
-                            .where('uf', String(uf))
-                            .distinct()
-                            .select('points.*')];
+                                .join('point_items', 'points.id', '=', 'point_items.point_id')
+                                .whereIn('point_items.item_id', parsedItems)
+                                .where('city', String(city))
+                                .where('uf', String(uf))
+                                .distinct()
+                                .select('points.*')];
                     case 1:
                         points = _b.sent();
                         return [2 /*return*/, response.json(points)];
@@ -81,9 +92,9 @@ var PointsController = /** @class */ (function () {
                             return [2 /*return*/, response.status(400).json('Ponto de coleta inexistente!')];
                         }
                         return [4 /*yield*/, connection_1.default('items')
-                            .join('point_items', 'items.id', '=', 'point_items.item_id')
-                            .where('point_items.point_id', id)
-                            .select('items.*')];
+                                .join('point_items', 'items.id', '=', 'point_items.item_id')
+                                .where('point_items.point_id', id)
+                                .select('items.*')];
                     case 2:
                         items = _a.sent();
                         return [2 /*return*/, response.json({ point: point, items: items })];
@@ -93,14 +104,45 @@ var PointsController = /** @class */ (function () {
     };
     PointsController.prototype.create = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                try {
-                    return [2 /*return*/, response.json('ok')];
+            var _a, name, email, whatsapp, latitude, longitude, city, uf, items, trx, point, insertedIds, point_id, pointItems;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = request.body, name = _a.name, email = _a.email, whatsapp = _a.whatsapp, latitude = _a.latitude, longitude = _a.longitude, city = _a.city, uf = _a.uf, items = _a.items;
+                        return [4 /*yield*/, connection_1.default.transaction()];
+                    case 1:
+                        trx = _b.sent();
+                        point = {
+                            image: request.file.filename,
+                            name: name,
+                            email: email,
+                            whatsapp: whatsapp,
+                            latitude: latitude,
+                            longitude: longitude,
+                            city: city,
+                            uf: uf,
+                        };
+                        return [4 /*yield*/, trx('points').insert(point)];
+                    case 2:
+                        insertedIds = _b.sent();
+                        point_id = insertedIds[0];
+                        pointItems = items
+                            .split(',')
+                            .map(function (item) { return Number(item.trim()); })
+                            .map(function (item_id) {
+                            return {
+                                item_id: item_id,
+                                point_id: point_id,
+                            };
+                        });
+                        return [4 /*yield*/, trx('point_items').insert(pointItems)];
+                    case 3:
+                        _b.sent();
+                        return [4 /*yield*/, trx.commit()];
+                    case 4:
+                        _b.sent();
+                        return [2 /*return*/, response.json(__assign({ id: point_id }, point))];
                 }
-                catch (error) {
-                    return [2 /*return*/, response.status(404).json(error.message)];
-                }
-                return [2 /*return*/];
             });
         });
     };

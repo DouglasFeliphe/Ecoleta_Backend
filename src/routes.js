@@ -19,7 +19,5 @@ routes.get('/items', itemsController.index);
 routes.get('/points', pointsController.index);
 // mostrar ponto de coleta espeçífico
 routes.get('/points/:id', pointsController.show);
-routes.post('/point', function (request, response) {
-    return response.json('ok');
-});
+routes.post('/point', upload.single('image'), pointsController.create);
 exports.default = routes;
