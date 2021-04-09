@@ -1,10 +1,10 @@
 import connection from '../database/connection'
 import { Request, Response } from 'express';
 
-class ItemsController {   
+class ItemsController {
 
     async index(request: Request, response: Response) {
-        console.log('process.env :>> ', process.env.APP_URL);
+
         const items = await connection('items').select('*')
         // transforma os dados para um novo formato
         const serializedItems = items.map(item => {
