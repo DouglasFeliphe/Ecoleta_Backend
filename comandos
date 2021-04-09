@@ -26,3 +26,5 @@ npx knex seed:make [seed_name]
 npx knex seed:run
 
 tsc -  fazer deploy do código para produção.
+
+executar comandos: heroku [comando] -a [nome-da-aplicacao]
