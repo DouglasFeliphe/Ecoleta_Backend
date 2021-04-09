@@ -22,7 +22,7 @@ routes.get('/points', pointsController.index)
 // mostrar ponto de coleta espeçífico
 routes.get('/points/:id', pointsController.show)
 
-routes.post('/point', upload.single('image'), pointsController.create)
+routes.post('/point', pointsController.create)
 
 
 export default routes
