@@ -137,7 +137,9 @@ var PointsController = /** @class */ (function () {
                         return [4 /*yield*/, transaction('point_items').insert(pointItems)];
                     case 3:
                         _b.sent();
-                        transaction.commit();
+                        return [4 /*yield*/, transaction.commit()];
+                    case 4:
+                        _b.sent();
                         return [2 /*return*/, response.json(__assign({ id: point_id }, point))];
                 }
             });
