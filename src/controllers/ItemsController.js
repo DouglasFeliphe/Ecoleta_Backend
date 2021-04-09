@@ -48,9 +48,11 @@ var ItemsController = /** @class */ (function () {
             var items, serializedItems;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, connection_1.default('items').select('*')
-                        // transforma os dados para um novo formato
-                    ];
+                    case 0:
+                        console.log('process.env :>> ', process.env.APP_URL);
+                        return [4 /*yield*/, connection_1.default('items').select('*')
+                            // transforma os dados para um novo formato
+                        ];
                     case 1:
                         items = _a.sent();
                         serializedItems = items.map(function (item) {
