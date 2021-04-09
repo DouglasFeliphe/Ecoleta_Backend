@@ -20,7 +20,14 @@ class PointsController {
             .distinct()
             .select('points.*')
 
-        return response.json(points)
+        const serializedPoints = points.map(point => {
+            return {
+                ...point,
+                image_url: process.env.APP_URL + `uploads/${point.image}`
+            }
+        })
+
+        return response.json(serializedPoints)
     }
 
     async show(request: Request, response: Response) {
@@ -31,21 +38,30 @@ class PointsController {
         if (!point) {
             return response.status(400).json('Ponto de coleta inexistente!')
         }
+
+        const serializedPoint = {
+            ...point,
+            image_url: process.env.APP_URL + `uploads/${point.image}`
+        }
+
+
         // listar todos os items do ponto de coleta específico
         const items = await connection('items')
             .join('point_items', 'items.id', '=', 'point_items.item_id')
             .where('point_items.point_id', id)
             .select('items.*')
 
-        return response.json({ point, items })
+        return response.json({ point: serializedPoint, items })
     }
 
     async create(request: Request, response: Response) {
 
         const {
-            id, image, name,
-            email, whatsapp, latitude,
-            longitude, city, uf,
+            name,
+            email,
+            whatsapp,
+            latitude, longitude,
+            city, uf,
             items
         } = request.body
 
@@ -68,12 +84,15 @@ class PointsController {
         // relacionamento
         const point_id = insertedIds[0]
 
-        const pointItems = items.map((item_id: number) => {
-            return {
-                item_id,
-                point_id
-            }
-        })
+        const pointItems = items
+            .split(',')
+            .map((item: string) => Number(item.trim()))
+            .map((item_id: number) => {
+                return {
+                    item_id,
+                    point_id,
+                };
+            });
 
         await transaction('point_items').insert(pointItems)
 
