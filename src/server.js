@@ -9,7 +9,7 @@ var path_1 = __importDefault(require("path"));
 var cors_1 = __importDefault(require("cors"));
 var app = express_1.default();
 app.use(cors_1.default({
-    origin: 'https://douglasfeliphe.github.io/Ecoleta_Web/'
+    origin: 'https://douglasfeliphe.github.io'
 }));
 app.use(express_1.default.json());
 app.use(routes_1.default);
