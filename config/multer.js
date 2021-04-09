@@ -8,7 +8,7 @@ var path_1 = __importDefault(require("path"));
 var crypto_1 = __importDefault(require("crypto"));
 exports.default = {
     storage: multer_1.default.diskStorage({
-        destination: path_1.default.resolve(__dirname, '..', '..', 'uploads'),
+        destination: path_1.default.resolve(__dirname, '..', 'uploads'),
         filename: function (request, file, callback) {
             // gerando nome único para cada arquivo
             var hash = crypto_1.default.randomBytes(6).toString('hex');

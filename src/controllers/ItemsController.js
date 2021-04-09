@@ -57,11 +57,7 @@ var ItemsController = /** @class */ (function () {
                             return {
                                 id: item.id,
                                 title: item.title,
-<<<<<<< HEAD
-                                image_url: "http://192.168.42.52:3333/uploads/" + item.image
-=======
                                 image_url: process.env.APP_URL + ("uploads/" + item.image)
->>>>>>> d97917b0154fe5bbede89af38e1384c86caabf68
                             };
                         });
                         return [2 /*return*/, response.json(serializedItems)];

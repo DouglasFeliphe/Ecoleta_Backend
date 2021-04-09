@@ -104,7 +104,6 @@ var PointsController = /** @class */ (function () {
     };
     PointsController.prototype.create = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
-<<<<<<< HEAD
             var _a, id, image, name, email, whatsapp, latitude, longitude, city, uf, items, transaction, point, insertedIds, point_id, pointItems;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -115,25 +114,12 @@ var PointsController = /** @class */ (function () {
                         transaction = _b.sent();
                         point = {
                             image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60',
-=======
-            var _a, name, email, whatsapp, latitude, longitude, city, uf, items, trx, point, insertedIds, point_id, pointItems;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = request.body, name = _a.name, email = _a.email, whatsapp = _a.whatsapp, latitude = _a.latitude, longitude = _a.longitude, city = _a.city, uf = _a.uf, items = _a.items;
-                        return [4 /*yield*/, connection_1.default.transaction()];
-                    case 1:
-                        trx = _b.sent();
-                        point = {
-                            image: request.file.filename,
->>>>>>> d97917b0154fe5bbede89af38e1384c86caabf68
                             name: name,
                             email: email,
                             whatsapp: whatsapp,
                             latitude: latitude,
                             longitude: longitude,
                             city: city,
-<<<<<<< HEAD
                             uf: uf
                         };
                         return [4 /*yield*/, transaction('points').insert(point)
@@ -152,29 +138,6 @@ var PointsController = /** @class */ (function () {
                     case 3:
                         _b.sent();
                         transaction.commit();
-=======
-                            uf: uf,
-                        };
-                        return [4 /*yield*/, trx('points').insert(point)];
-                    case 2:
-                        insertedIds = _b.sent();
-                        point_id = insertedIds[0];
-                        pointItems = items
-                            .split(',')
-                            .map(function (item) { return Number(item.trim()); })
-                            .map(function (item_id) {
-                            return {
-                                item_id: item_id,
-                                point_id: point_id,
-                            };
-                        });
-                        return [4 /*yield*/, trx('point_items').insert(pointItems)];
-                    case 3:
-                        _b.sent();
-                        return [4 /*yield*/, trx.commit()];
-                    case 4:
-                        _b.sent();
->>>>>>> d97917b0154fe5bbede89af38e1384c86caabf68
                         return [2 /*return*/, response.json(__assign({ id: point_id }, point))];
                 }
             });
