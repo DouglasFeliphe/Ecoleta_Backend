@@ -77,7 +77,7 @@ class PointsController {
 
         await transaction('point_items').insert(pointItems)
 
-        transaction.commit()
+        await transaction.commit()
 
         return response.json({
             id: point_id,
