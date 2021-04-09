@@ -17,11 +17,11 @@ module.exports = {
             directory: path_1.default.resolve(__dirname, 'src', 'database', 'seeds')
         }
     },
-    // production: {
-    //     client: 'pg',
-    //     connection: process.env.DATABASE_URL,
-    //     migrations: {
-    //         directory: path.resolve(__dirname, 'src', 'database', 'migrations')
-    //     },
-    // }
+    production: {
+        client: 'pg',
+        connection: process.env.DATABASE_URL,
+        migrations: {
+            directory: path_1.default.resolve(__dirname, 'src', 'database', 'migrations')
+        },
+    }
 };
