@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
+var celebrate_1 = __importDefault(require("../config/celebrate"));
 var multer_1 = __importDefault(require("multer"));
 var multer_2 = __importDefault(require("../config/multer"));
 var PointsController_1 = __importDefault(require("./controllers/PointsController"));
@@ -19,5 +20,5 @@ routes.get('/items', itemsController.index);
 routes.get('/points', pointsController.index);
 // mostrar ponto de coleta espeçífico
 routes.get('/points/:id', pointsController.show);
-routes.post('/point', upload.single('image'), pointsController.create);
+routes.post('/point', upload.single('image'), celebrate_1.default(), pointsController.create);
 exports.default = routes;

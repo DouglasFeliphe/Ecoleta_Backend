@@ -108,11 +108,11 @@ var PointsController = /** @class */ (function () {
     };
     PointsController.prototype.create = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, id, image, name, email, whatsapp, latitude, longitude, city, uf, items, transaction, point, insertedIds, point_id, pointItems;
+            var _a, name, email, whatsapp, latitude, longitude, city, uf, items, transaction, point, insertedIds, point_id, pointItems;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = request.body, id = _a.id, image = _a.image, name = _a.name, email = _a.email, whatsapp = _a.whatsapp, latitude = _a.latitude, longitude = _a.longitude, city = _a.city, uf = _a.uf, items = _a.items;
+                        _a = request.body, name = _a.name, email = _a.email, whatsapp = _a.whatsapp, latitude = _a.latitude, longitude = _a.longitude, city = _a.city, uf = _a.uf, items = _a.items;
                         return [4 /*yield*/, connection_1.default.transaction()];
                     case 1:
                         transaction = _b.sent();
@@ -132,10 +132,13 @@ var PointsController = /** @class */ (function () {
                     case 2:
                         insertedIds = _b.sent();
                         point_id = insertedIds[0];
-                        pointItems = items.map(function (item_id) {
+                        pointItems = items
+                            .split(',')
+                            .map(function (item) { return Number(item.trim()); })
+                            .map(function (item_id) {
                             return {
                                 item_id: item_id,
-                                point_id: point_id
+                                point_id: point_id,
                             };
                         });
                         return [4 /*yield*/, transaction('point_items').insert(pointItems)];
